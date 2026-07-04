@@ -40,8 +40,41 @@ type DataStore interface {
 	CreateUser(user User) error
 }
 
+type Service struct {
+	ds DataStore
+}
+
+func (s Service) GetUser(id int) (User, error) {
+	return s.ds.GetUserByID(id)
+}
+
+func (s Service) CreateUser(u User) error {
+	return s.ds.CreateUser(u)
+}
+
 func main4() {
 	fmt.Println("Hello World 4")
-	log.Println("This is a log message")
+	db := MockDataStore{
+		Users: make(map[int]User),
+	}
+
+	srvc := Service{
+		ds: db,
+	}
+
+	u1 := User{
+		ID:        1,
+		FirstName: "John",
+	}
+
+	err := srvc.CreateUser(u1)
+	if err != nil {
+		log.Fatalf("error creating user %v", err)
+	}
+
+	u1Returned, err := srvc.GetUser(u1.ID)
+
+	fmt.Println("User created: ", u1)
+	fmt.Println("User returned: ", u1Returned)
 
 }

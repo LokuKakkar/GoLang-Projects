@@ -1,5 +1,6 @@
 package main
 
+// run with go run .
 import (
 	"fmt"
 	"math/rand"
